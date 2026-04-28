@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>關於我們｜磐誠資訊有限公司</title>
+<meta name="description" content="在地服務，不只是技術，而是能解決問題。從電腦維修到整合服務，就在恆春。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #1a1a18;
+  --paper:  #f5f2eb;
+  --accent: #c8401a;
+  --muted:  #7a7268;
+  --border: #d8d3c8;
+  --warm:   #e8e2d6;
+  --mono:   'DM Mono', monospace;
+  --serif:  'Noto Serif TC', serif;
+  --sans:   'Noto Sans TC', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); line-height: 1.7; overflow-x: hidden; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.45;
+}
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 4vw; height: 64px; background: rgba(245,242,235,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: var(--serif); font-weight: 900; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a { font-size: 0.83rem; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--ink); }
+.hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+.hamburger span { display: block; width: 24px; height: 1.5px; background: var(--ink); }
+.mobile-menu { display: none; position: fixed; inset: 64px 0 0 0; background: rgba(245,242,235,0.97); backdrop-filter: blur(16px); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+.mobile-menu a:hover { color: var(--accent); }
+
+/* COMMON */
+.sec { padding: 96px 4vw; }
+.inner { max-width: 1060px; margin: 0 auto; }
+.tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.7rem; }
+h2 { font-family: var(--serif); font-size: clamp(1.6rem, 2.8vw, 2.3rem); font-weight: 900; line-height: 1.25; margin-bottom: 0.8rem; }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.sec-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* PAGE HERO */
+#page-hero {
+  min-height: 60vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 140px 4vw 72px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+/* 手寫質感橫線 */
+#page-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 47px,
+      rgba(255,255,255,0.025) 47px,
+      rgba(255,255,255,0.025) 48px
+    );
+  pointer-events: none;
+}
+.page-hero-inner { max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+#page-hero .tag { color: var(--accent); }
+#page-hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 900; color: var(--paper); line-height: 1.15; margin-bottom: 1.2rem; letter-spacing: -0.01em; }
+#page-hero h1 em { font-style: normal; color: var(--accent); }
+#page-hero .sub { font-size: 1.05rem; color: rgba(245,242,235,0.5); font-weight: 300; line-height: 1.85; max-width: 560px; border-left: 3px solid var(--accent); padding-left: 1.2rem; }
+/* 公司資訊欄 */
+.hero-meta { display: flex; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
+.hm-item { }
+.hm-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 4px; }
+.hm-val { font-size: 0.88rem; color: rgba(255,255,255,0.65); font-weight: 300; }
+
+/* ── BLOCK 1: 故事 ── */
+#story { background: var(--paper); }
+.story-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+.story-text { }
+.story-text p { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 2; margin-bottom: 1.2rem; }
+.story-text p strong { color: var(--ink); font-weight: 500; }
+.story-pull {
+  margin: 2rem 0;
+  padding: 1.4rem 1.6rem;
+  border-left: 4px solid var(--accent);
+  background: rgba(200,64,26,0.04);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.6;
+}
+/* 問題清單 */
+.story-problems { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+.sp-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; color: var(--muted); font-weight: 300; }
+.sp-item:first-child { border-top: 1px solid var(--border); }
+.sp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+/* 右側裝飾卡 */
+.story-right { position: sticky; top: 80px; }
+.origin-card { background: var(--ink); padding: 2.4rem; box-shadow: 8px 8px 0 var(--accent); margin-bottom: 1.5rem; }
+.oc-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 1.4rem; }
+.oc-stat { display: flex; flex-direction: column; gap: 0; }
+.oc-row { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 0.7rem 0; }
+.oc-row:last-child { border-bottom: none; }
+.oc-k { font-size: 0.78rem; color: rgba(255,255,255,0.35); font-weight: 300; }
+.oc-v { font-family: var(--mono); font-size: 0.78rem; color: rgba(245,242,235,0.8); }
+.story-note { padding: 1.2rem; border: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); font-weight: 300; line-height: 1.8; }
+.story-note strong { color: var(--ink); font-weight: 500; }
+
+/* ── BLOCK 2: 做什麼 ── */
+#what { background: #f0ece3; }
+.what-intro { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 1.9; max-width: 600px; margin-bottom: 3rem; }
+.what-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--border); border: 1px solid var(--border); }
+.what-card { background: var(--paper); padding: 2rem; transition: background 0.2s; }
+.what-card:hover { background: #ece8df; }
+.wc-cat { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; display: block; }
+.wc-icon { font-size: 1.4rem; margin-bottom: 0.8rem; display: block; }
+.what-card h4 { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+.what-card p { font-size: 0.8rem; color: var(--muted); font-weight: 300; line-height: 1.8; }
+.what-footer { margin-top: 2rem; padding: 1.4rem 1.6rem; background: var(--ink); color: var(--paper); font-size: 0.9rem; font-weight: 300; line-height: 1.85; }
+.what-footer strong { color: var(--accent); }
+
+/* ── BLOCK 3: 核心價值 ── */
+#values { background: var(--paper); }
+.val-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.val-manifesto { }
+.vm-item { padding: 2rem 0; border-bottom: 1px solid var(--border); }
+.vm-item:first-child { border-top: 1px solid var(--border); }
+.vm-contrast { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; }
+.vm-no { font-size: 0.88rem; color: var(--muted); font-weight: 300; text-decoration: line-through; text-decoration-color: rgba(200,64,26,0.4); }
+.vm-arrow { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); text-align: center; flex-shrink: 0; }
+.vm-yes { font-size: 0.92rem; color: var(--ink); font-weight: 500; }
+.val-right { }
+.val-summary {
+  background: var(--ink);
+  padding: 2.4rem;
+  position: relative;
+}
+.vs-headline { font-family: var(--serif); font-size: 1.2rem; font-weight: 900; color: var(--paper); line-height: 1.5; margin-bottom: 1.5rem; }
+.vs-headline em { font-style: normal; color: var(--accent); }
+.vs-list { display: flex; flex-direction: column; gap: 0.8rem; }
+.vs-item { display: flex; gap: 0.8rem; font-size: 0.85rem; color: rgba(245,242,235,0.6); font-weight: 300; line-height: 1.7; }
+.vs-item::before { content: '✦'; color: var(--accent); font-size: 0.7rem; flex-shrink: 0; margin-top: 3px; }
+
+/* ── BLOCK 4: 在地優勢 ── */
+#local { background: var(--ink); color: var(--paper); }
+#local .tag { color: var(--accent); }
+#local h2 { color: var(--paper); }
+.local-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.local-pts { display: flex; flex-direction: column; gap: 1.4rem; margin-top: 1rem; }
+.lp { display: flex; gap: 1.2rem; align-items: flex-start; }
+.lp-icon { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.lp h4 { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; color: var(--paper); margin-bottom: 0.3rem; }
+.lp p { font-size: 0.82rem; color: rgba(245,242,235,0.45); font-weight: 300; line-height: 1.75; }
+/* 地圖風格卡片 */
+.local-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; }
+.lc-map { width: 100%; height: 160px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 2.5rem; position: relative; overflow: hidden; }
+.lc-map::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px);
+}
+.lc-pin { position: relative; z-index: 1; filter: drop-shadow(0 0 12px rgba(200,64,26,0.6)); }
+.lc-rows { display: flex; flex-direction: column; gap: 0; }
+.lc-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 0.65rem 0; font-size: 0.8rem; }
+.lc-row:last-child { border-bottom: none; }
+.lc-k { color: rgba(255,255,255,0.3); font-weight: 300; }
+.lc-v { color: rgba(255,255,255,0.7); font-family: var(--mono); font-size: 0.75rem; }
+
+/* ── BLOCK 5: 合作方式 ── */
+#collab { background: var(--paper); }
+.collab-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.collab-steps { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
+.cs-step { display: grid; grid-template-columns: 56px 1fr; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+.cs-step:first-child { border-top: 1px solid var(--border); }
+.cs-num { font-family: var(--serif); font-size: 2rem; font-weight: 900; color: var(--border); line-height: 1; padding-top: 4px; }
+.cs-body h4 { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+.cs-body p { font-size: 0.82rem; color: var(--muted); font-weight: 300; line-height: 1.8; }
+.cs-badge { display: inline-block; margin-top: 0.5rem; padding: 3px 10px; background: rgba(200,64,26,0.08); border: 1px solid rgba(200,64,26,0.2); font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.06em; }
+.collab-right { }
+.collab-note { padding: 2rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+.cn-title { font-family: var(--serif); font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+.cn-items { display: flex; flex-direction: column; gap: 0.6rem; }
+.cn-item { display: flex; gap: 0.8rem; font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
+.cn-item::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+.collab-cta-text { padding: 1.4rem; background: var(--ink); color: var(--paper); font-size: 0.88rem; font-weight: 300; line-height: 1.85; }
+.collab-cta-text strong { color: var(--accent); }
+
+/* ── CONTACT CTA ── */
+#contact-cta { background: var(--accent); color: white; padding: 96px 4vw; }
+.contact-wrap { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.contact-left h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; color: white; line-height: 1.2; margin-bottom: 1rem; }
+.contact-left p { font-size: 0.95rem; color: rgba(255,255,255,0.75); font-weight: 300; line-height: 1.85; margin-bottom: 2rem; }
+.cta-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.btn-w { display: inline-flex; align-items: center; gap: 7px; padding: 14px 28px; background: white; color: var(--accent); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; transition: opacity 0.2s; }
+.btn-w:hover { opacity: 0.9; }
+.btn-o { display: inline-flex; align-items: center; gap: 7px; padding: 14px 28px; border: 1.5px solid rgba(255,255,255,0.5); color: white; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; transition: border-color 0.2s; }
+.btn-o:hover { border-color: white; }
+.contact-info { }
+.ci-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1.2rem; }
+.ci-items { display: flex; flex-direction: column; gap: 1rem; }
+.ci-item { display: flex; gap: 1rem; align-items: flex-start; }
+.ci-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+.ci-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); text-transform: uppercase; margin-bottom: 2px; }
+.ci-val { font-size: 0.88rem; color: rgba(255,255,255,0.85); font-weight: 300; }
+
+/* FOOTER */
+footer { background: #111110; color: rgba(255,255,255,0.28); padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.73rem; font-family: var(--mono); letter-spacing: 0.04em; flex-wrap: wrap; gap: 1rem; }
+footer a { color: rgba(255,255,255,0.28); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .story-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .story-right { position: static; }
+  .what-grid { grid-template-columns: 1fr; }
+  .val-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .vm-contrast { grid-template-columns: 1fr; gap: 0.4rem; }
+  .vm-arrow { display: none; }
+  .local-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .collab-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-meta { gap: 1.5rem; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">磐<span>誠</span>資訊</a>
+  <ul class="nav-links">
+    <li><a href="index.html">首頁</a></li>
+    <li><a href="services.html">服務項目</a></li>
+    <li><a href="line-ai.html">LINE AI 客服</a></li>
+    <li><a href="inspection.html">巡檢服務</a></li>
+    <li><a href="about.html" class="active">關於我們</a></li>
+    <li><a href="about.html#contact-cta">聯絡我們</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">首頁</a>
+  <a href="services.html" onclick="toggleMenu()">服務項目</a>
+  <a href="line-ai.html" onclick="toggleMenu()">LINE AI 客服</a>
+  <a href="inspection.html" onclick="toggleMenu()">巡檢服務</a>
+  <a href="about.html" onclick="toggleMenu()">關於我們</a>
+  <a href="about.html#contact-cta" onclick="toggleMenu()">聯絡我們</a>
+</div>
+
+<!-- PAGE HERO -->
+<section id="page-hero">
+  <div class="page-hero-inner reveal">
+    <div class="tag">// 關於我們</div>
+    <h1>在地服務<br>不只是<em>技術</em><br>而是能解決問題</h1>
+    <p class="sub">我們不是外地廠商，就在恆春。有問題可以直接聯絡，需要現場處理也能即時支援。</p>
+    <div class="hero-meta">
+      <div class="hm-item">
+        <div class="hm-label">公司</div>
+        <div class="hm-val">磐誠資訊有限公司</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">統一編號</div>
+        <div class="hm-val">42755900</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">服務地區</div>
+        <div class="hm-val">屏東恆春半島</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCK 1: 故事 -->
+<section class="sec" id="story">
+  <div class="inner">
+    <div class="story-wrap">
+      <div class="reveal">
+        <div class="tag">// 你的故事</div>
+        <h2>從電腦維修<br>到整合服務</h2>
+        <p>我們原本從電腦維修與設備服務開始。</p>
+        <p>在恆春這個地方，民宿、餐廳與各類店家，每天都面對類似的問題：</p>
+        <div class="story-problems">
+          <div class="sp-item"><span class="sp-dot"></span>設備出狀況</div>
+          <div class="sp-item"><span class="sp-dot"></span>LINE 訊息回不完</div>
+          <div class="sp-item"><span class="sp-dot"></span>網路不穩定</div>
+          <div class="sp-item"><span class="sp-dot"></span>監視器沒人維護</div>
+        </div>
+        <div class="story-pull">
+          因此，我們不只是提供單一服務——<br>
+          而是逐步整合，讓這些問題可以一次解決。
+        </div>
+        <p style="font-size:0.9rem;color:var(--muted);font-weight:300;line-height:1.9;">這不是一開始就規劃好的方向，而是跟著客戶的真實需求，一步一步走出來的。</p>
+      </div>
+      <div class="story-right reveal">
+        <div class="origin-card">
+          <div class="oc-label">// 公司登記資訊</div>
+          <div class="oc-stat">
+            <div class="oc-row"><span class="oc-k">公司名稱</span><span class="oc-v">磐誠資訊有限公司</span></div>
+            <div class="oc-row"><span class="oc-k">統一編號</span><span class="oc-v">42755900</span></div>
+            <div class="oc-row"><span class="oc-k">縣市</span><span class="oc-v">屏東縣恆春鎮</span></div>
+            <div class="oc-row"><span class="oc-k">地址</span><span class="oc-v">環城南路 20 號 1 樓</span></div>
+            <div class="oc-row"><span class="oc-k">服務範圍</span><span class="oc-v">恆春半島全區</span></div>
+          </div>
+        </div>
+        <div class="story-note">
+          <strong>目前預計明年正式復業</strong>，現階段持續接受諮詢與輕量服務。有需求歡迎直接聯絡，我們會盡力協助。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 2: 做什麼 -->
+<section class="sec" id="what">
+  <div class="inner">
+    <div class="reveal">
+      <div class="tag">// 你在做什麼</div>
+      <h2>我們做的，不只是維修</h2>
+      <p class="what-intro">從底層設備到上層系統，讓日常營運與設備管理可以更穩定、更省時間。</p>
+    </div>
+    <div class="what-grid reveal">
+      <div class="what-card">
+        <span class="wc-cat">日常維運</span>
+        <span class="wc-icon">🖥️</span>
+        <h4>電腦維修 / 組裝</h4>
+        <p>故障排除、升級配件、系統重灌、新機組裝。在地取送，快速回覆。</p>
+      </div>
+      <div class="what-card">
+        <span class="wc-cat">日常維運</span>
+        <span class="wc-icon">📹</span>
+        <h4>監視器安裝與維護</h4>
+        <p>攝影機規劃、安裝、遠端監控設定。確保畫面清晰、系統穩定。</p>
+      </div>
+      <div class="what-card">
+        <span class="wc-cat">日常維運</span>
+        <span class="wc-icon">🌐</span>
+        <h4>網路建置與調整</h4>
+        <p>Wi-Fi 規劃、路由器設定、網路故障排查。穩定連線，不斷網。</p>
+      </div>
+      <div class="what-card">
+        <span class="wc-cat">營運效率</span>
+        <span class="wc-icon">🤖</span>
+        <h4>LINE AI 客服系統</h4>
+        <p>自動回覆常見問題，減少重複訊息處理，讓你只需處理真正重要的事。</p>
+      </div>
+      <div class="what-card">
+        <span class="wc-cat">安全與巡檢</span>
+        <span class="wc-icon">🔍</span>
+        <h4>巡檢與設備安全服務</h4>
+        <p>夜間巡檢、熱像檢測、LINE 即時回報。提前發現問題，避免損失。</p>
+      </div>
+      <div class="what-card" style="background:var(--ink);cursor:default;">
+        <span class="wc-cat" style="color:var(--accent);">整合目標</span>
+        <span class="wc-icon">✦</span>
+        <h4 style="color:var(--paper);">一個窗口解決所有問題</h4>
+        <p style="color:rgba(245,242,235,0.4);">不需要找多個廠商，一通電話，我們統整處理。</p>
+      </div>
+    </div>
+    <div class="what-footer reveal">
+      讓日常營運與設備管理，可以更穩定、<strong>更省時間</strong>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 3: 核心價值 -->
+<section class="sec" id="values">
+  <div class="inner">
+    <div class="val-wrap">
+      <div class="reveal">
+        <div class="tag">// 核心價值</div>
+        <h2>我們在做的<br>是幫你少顧事情</h2>
+        <div class="val-manifesto">
+          <div class="vm-item">
+            <div class="vm-contrast">
+              <div class="vm-no">只幫你修壞掉的東西</div>
+              <div class="vm-arrow">→</div>
+              <div class="vm-yes">讓問題減少發生</div>
+            </div>
+          </div>
+          <div class="vm-item">
+            <div class="vm-contrast">
+              <div class="vm-no">只給你系統</div>
+              <div class="vm-arrow">→</div>
+              <div class="vm-yes">幫你真的用起來</div>
+            </div>
+          </div>
+          <div class="vm-item">
+            <div class="vm-contrast">
+              <div class="vm-no">被動等你叫才動</div>
+              <div class="vm-arrow">→</div>
+              <div class="vm-yes">提前發現，提前處理</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="val-summary">
+          <div class="vs-headline">
+            讓你在日常營運中<br>
+            少花時間在<em>重複與突發</em>問題上
+          </div>
+          <div class="vs-list">
+            <div class="vs-item">客人問題由 AI 自動回覆，不用一直盯 LINE</div>
+            <div class="vs-item">設備異常由巡檢提前發現，不用等壞了才處理</div>
+            <div class="vs-item">IT 問題由一個窗口統整，不用找多個廠商</div>
+            <div class="vs-item">有問題可以直接聯絡，不會讓你自己摸索</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 4: 在地優勢 -->
+<section class="sec" id="local">
+  <div class="inner">
+    <div class="local-wrap">
+      <div class="reveal">
+        <div class="tag">// 在地優勢</div>
+        <h2>在地服務<br>比什麼都重要</h2>
+        <div class="local-pts">
+          <div class="lp">
+            <div class="lp-icon">📍</div>
+            <div>
+              <h4>我們就在恆春</h4>
+              <p>有問題可以直接聯絡，需要現場處理也能即時支援，不用等外縣市廠商排班。</p>
+            </div>
+          </div>
+          <div class="lp">
+            <div class="lp-icon">🤝</div>
+            <div>
+              <h4>不是外地遠端廠商</h4>
+              <p>也不是只提供系統的服務。我們會陪你從設定、測試到真正上線，確保有用。</p>
+            </div>
+          </div>
+          <div class="lp">
+            <div class="lp-icon">🌱</div>
+            <div>
+              <h4>能長期配合的在地夥伴</h4>
+              <p>服務到位，才是真的有用。我們希望成為你可以長期依靠的在地 IT 窗口。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="local-card">
+          <div class="lc-map">
+            <span class="lc-pin">📍</span>
+          </div>
+          <div class="lc-rows">
+            <div class="lc-row"><span class="lc-k">位置</span><span class="lc-v">屏東縣恆春鎮</span></div>
+            <div class="lc-row"><span class="lc-k">地址</span><span class="lc-v">環城南路 20 號 1 樓</span></div>
+            <div class="lc-row"><span class="lc-k">服務範圍</span><span class="lc-v">恆春 / 車城 / 墾丁</span></div>
+            <div class="lc-row"><span class="lc-k">遠端協助</span><span class="lc-v">其他地區可洽詢</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 5: 合作方式 -->
+<section class="sec" id="collab">
+  <div class="inner">
+    <div class="collab-wrap">
+      <div class="reveal">
+        <div class="tag">// 合作方式</div>
+        <h2>合作方式</h2>
+        <div class="collab-steps">
+          <div class="cs-step">
+            <div class="cs-num">01</div>
+            <div class="cs-body">
+              <h4>從基本維修開始</h4>
+              <p>可先從電腦維修、網路建置等基本 IT 服務開始，建立信任與了解需求。</p>
+              <span class="cs-badge">低門檻切入</span>
+            </div>
+          </div>
+          <div class="cs-step">
+            <div class="cs-num">02</div>
+            <div class="cs-body">
+              <h4>導入 LINE AI 客服</h4>
+              <p>有 LINE 客服需求時，可先免費測試效果，確認有幫助再正式導入。</p>
+              <span class="cs-badge">先測試再決定</span>
+            </div>
+          </div>
+          <div class="cs-step">
+            <div class="cs-num">03</div>
+            <div class="cs-body">
+              <h4>整合巡檢與設備管理</h4>
+              <p>再進一步整合巡檢與設備安全服務，讓日常營運全面穩定。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="collab-note">
+          <div class="cn-title">依店家需求提供不同服務</div>
+          <div class="cn-items">
+            <div class="cn-item">可從基本維修開始</div>
+            <div class="cn-item">或導入 LINE AI 客服</div>
+            <div class="cn-item">再進一步整合巡檢與設備管理</div>
+            <div class="cn-item">不需要一次全部導入</div>
+            <div class="cn-item">可依實際需求逐步調整</div>
+          </div>
+        </div>
+        <div class="collab-cta-text">
+          想了解適合你的服務方式？<br>
+          <strong>歡迎直接聯絡我們討論</strong>——沒有壓力，先聊需求再說。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT CTA -->
+<section id="contact-cta">
+  <div class="contact-wrap">
+    <div class="reveal">
+      <div class="contact-left">
+        <h2>想了解適合你的<br>服務方式？</h2>
+        <p>可以先告訴我們你目前遇到的問題，或想了解哪項服務——我們會依你的需求，提供最適合的建議。</p>
+        <div class="cta-btns">
+          <a href="line-ai.html" class="btn-w">免費測試 LINE AI 客服</a>
+          <a href="#" class="btn-o">預約巡檢評估</a>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="contact-info">
+        <div class="ci-title">// 聯絡資訊</div>
+        <div class="ci-items">
+          <div class="ci-item">
+            <div class="ci-icon">🏢</div>
+            <div>
+              <div class="ci-label">公司</div>
+              <div class="ci-val">磐誠資訊有限公司</div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">📍</div>
+            <div>
+              <div class="ci-label">地址</div>
+              <div class="ci-val">屏東縣恆春鎮山腳里<br>環城南路 20 號 1 樓</div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">💬</div>
+            <div>
+              <div class="ci-label">LINE 官方帳號</div>
+              <div class="ci-val">搜尋「磐誠資訊」加好友</div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">🪪</div>
+            <div>
+              <div class="ci-label">統一編號</div>
+              <div class="ci-val">42755900</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 磐誠資訊有限公司 · 統編 42755900</span>
+  <span>屏東縣恆春鎮山腳里環城南路 20 號 1 樓</span>
+  <a href="#page-hero">↑ 回頂部</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

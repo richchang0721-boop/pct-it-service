@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巡檢與設備安全服務｜磐誠資訊有限公司</title>
+<meta name="description" content="不是等壞掉才處理，而是提前發現問題，避免出事。夜間巡檢、熱像檢測、LINE 即時回報。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #1a1a18;
+  --paper:   #f5f2eb;
+  --accent:  #c8401a;
+  --amber:   #e8a020;
+  --muted:   #7a7268;
+  --border:  #d8d3c8;
+  --d-bg:    #0e0f0d;
+  --d-card:  #161714;
+  --d-line:  rgba(255,255,255,0.07);
+  --mono:    'DM Mono', monospace;
+  --serif:   'Noto Serif TC', serif;
+  --sans:    'Noto Sans TC', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--d-bg); color: var(--paper); line-height: 1.7; overflow-x: hidden; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.6;
+}
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 4vw; height: 64px; background: rgba(14,15,13,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--d-line); }
+.nav-logo { font-family: var(--serif); font-weight: 900; font-size: 1.05rem; color: var(--paper); text-decoration: none; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a { font-size: 0.83rem; font-weight: 500; color: rgba(245,242,235,0.45); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: var(--amber); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.nav-links a:hover { color: var(--paper); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--paper); }
+.hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+.hamburger span { display: block; width: 24px; height: 1.5px; background: var(--paper); }
+.mobile-menu { display: none; position: fixed; inset: 64px 0 0 0; background: rgba(14,15,13,0.97); backdrop-filter: blur(16px); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--paper); text-decoration: none; }
+.mobile-menu a:hover { color: var(--amber); }
+
+/* COMMON */
+.sec { padding: 96px 4vw; }
+.inner { max-width: 1060px; margin: 0 auto; }
+.tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.7rem; }
+h2 { font-family: var(--serif); font-size: clamp(1.6rem, 2.8vw, 2.3rem); font-weight: 900; line-height: 1.25; margin-bottom: 0.8rem; color: var(--paper); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.sec-divider { border: none; border-top: 1px solid var(--d-line); margin: 0; }
+
+/* PAGE HERO */
+#page-hero {
+  padding: 140px 4vw 72px;
+  background: var(--d-bg);
+  position: relative;
+  overflow: hidden;
+}
+.hero-scan-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  animation: scan 4s ease-in-out infinite;
+}
+@keyframes scan {
+  0% { top: 64px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.4; }
+  100% { top: 100%; opacity: 0; }
+}
+#page-hero::after {
+  content: '🔍';
+  position: absolute; right: 4vw; top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(6rem, 14vw, 12rem);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  filter: grayscale(1);
+}
+.page-hero-inner { max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 1.5rem;
+  padding: 6px 14px;
+  background: rgba(232,160,32,0.1);
+  border: 1px solid rgba(232,160,32,0.25);
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--amber);
+}
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.4; transform:scale(0.7); } }
+#page-hero h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; color: var(--paper); line-height: 1.2; margin-bottom: 1rem; }
+#page-hero h1 em { font-style: normal; color: var(--amber); }
+#page-hero .sub { font-size: 1rem; color: rgba(245,242,235,0.45); font-weight: 300; line-height: 1.85; max-width: 500px; }
+
+/* THERMAL TEMP WIDGET */
+.temp-widget {
+  display: inline-flex; align-items: center; gap: 2rem;
+  margin-top: 2.5rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--d-line);
+  background: var(--d-card);
+}
+.temp-item { text-align: center; }
+.temp-val { font-family: var(--mono); font-size: 1.4rem; font-weight: 500; line-height: 1; margin-bottom: 4px; }
+.temp-val.normal { color: #4fc; }
+.temp-val.warn { color: var(--amber); }
+.temp-val.alert { color: var(--accent); }
+.temp-label { font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; text-transform: uppercase; }
+.temp-sep { width: 1px; height: 40px; background: var(--d-line); }
+.temp-status { font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; }
+
+/* ── BLOCK 1: 痛點 ── */
+#pain { background: var(--d-bg); }
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.pain-scenarios { display: flex; flex-direction: column; gap: 0; margin-top: 1.5rem; }
+.ps-item { display: flex; gap: 1.2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--d-line); align-items: flex-start; }
+.ps-item:first-child { border-top: 1px solid var(--d-line); }
+.ps-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+.ps-item h4 { font-size: 0.9rem; font-weight: 500; color: var(--paper); margin-bottom: 0.2rem; }
+.ps-item p { font-size: 0.8rem; color: rgba(245,242,235,0.4); font-weight: 300; line-height: 1.6; }
+.pain-conclusion { margin-top: 1.5rem; padding: 1.2rem 1.4rem; border-left: 3px solid var(--accent); background: rgba(200,64,26,0.08); font-size: 0.88rem; color: rgba(245,242,235,0.6); font-weight: 300; line-height: 1.85; }
+.pain-conclusion strong { color: var(--paper); }
+/* timeline visual */
+.timeline-viz { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 1rem; padding: 1.2rem 1.4rem; border: 1px solid var(--d-line); border-bottom: none; background: var(--d-card); transition: background 0.2s; position: relative; }
+.tl-item:last-child { border-bottom: 1px solid var(--d-line); }
+.tl-item:hover { background: #1c1d1a; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.tl-dot.ok { background: rgba(255,255,255,0.15); }
+.tl-dot.warn { background: var(--amber); box-shadow: 0 0 6px rgba(232,160,32,0.5); }
+.tl-dot.bad { background: var(--accent); box-shadow: 0 0 8px rgba(200,64,26,0.6); }
+.tl-content {}
+.tl-time { font-family: var(--mono); font-size: 0.63rem; color: rgba(255,255,255,0.25); letter-spacing: 0.08em; margin-bottom: 3px; }
+.tl-text { font-size: 0.83rem; color: rgba(245,242,235,0.7); font-weight: 300; line-height: 1.5; }
+.tl-text strong { color: var(--paper); font-weight: 500; }
+.tl-badge { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 2px; }
+.tl-badge.ok { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.3); }
+.tl-badge.warn { background: rgba(232,160,32,0.15); color: var(--amber); }
+.tl-badge.bad { background: rgba(200,64,26,0.2); color: #e87060; }
+
+/* ── BLOCK 2: 核心價值 ── */
+#value { background: var(--d-card); }
+.value-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.value-detected { }
+.vd-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 1rem; }
+.vd-items { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+.vd-item { display: flex; gap: 1rem; align-items: center; padding: 0.9rem 1.1rem; border: 1px solid var(--d-line); }
+.vd-icon { font-size: 1rem; flex-shrink: 0; }
+.vd-item p { font-size: 0.85rem; color: rgba(245,242,235,0.65); font-weight: 300; }
+.value-result { padding: 1.4rem; background: rgba(232,160,32,0.06); border: 1px solid rgba(232,160,32,0.2); }
+.vr-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--amber); text-transform: uppercase; margin-bottom: 0.8rem; }
+.vr-items { display: flex; flex-direction: column; gap: 0.5rem; }
+.vr-item { display: flex; gap: 0.7rem; font-size: 0.85rem; color: rgba(245,242,235,0.65); font-weight: 300; }
+.vr-item::before { content: '→'; color: var(--amber); flex-shrink: 0; }
+.value-right { }
+.value-quote { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: var(--paper); line-height: 1.5; padding: 1.6rem; border: 1px solid var(--amber); margin-bottom: 1.5rem; position: relative; }
+.value-quote::before { content: '"'; font-size: 3rem; color: var(--amber); opacity: 0.3; position: absolute; top: -8px; left: 1rem; font-family: var(--serif); line-height: 1; }
+.value-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--d-line); }
+.vs { background: var(--d-card); padding: 1.4rem; text-align: center; border: 1px solid var(--d-line); }
+.vs-num { font-family: var(--serif); font-size: 1.8rem; font-weight: 900; color: var(--amber); line-height: 1; margin-bottom: 0.4rem; }
+.vs-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.3); font-weight: 300; line-height: 1.5; }
+
+/* ── BLOCK 3: 服務內容 ── */
+#services-content { background: var(--d-bg); }
+.svc-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--d-line); border: 1px solid var(--d-line); margin-top: 2.5rem; }
+.svc-card { background: var(--d-card); padding: 2rem; transition: background 0.2s; }
+.svc-card:hover { background: #1c1d1a; }
+.svc-card-num { font-family: var(--mono); font-size: 0.63rem; color: var(--amber); letter-spacing: 0.1em; margin-bottom: 1rem; display: block; }
+.svc-card-icon { font-size: 1.5rem; margin-bottom: 0.8rem; display: block; }
+.svc-card h4 { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--paper); margin-bottom: 0.5rem; }
+.svc-card p { font-size: 0.82rem; color: rgba(245,242,235,0.45); font-weight: 300; line-height: 1.8; }
+.svc-note { margin-top: 2rem; padding: 1rem 1.4rem; border: 1px dashed rgba(232,160,32,0.25); font-family: var(--mono); font-size: 0.78rem; color: rgba(232,160,32,0.6); letter-spacing: 0.06em; line-height: 1.7; }
+
+/* ── BLOCK 4: 實際情境 ── */
+#scenarios { background: var(--d-card); }
+.sc-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.sc-card { padding: 1.8rem; border: 1px solid var(--d-line); position: relative; overflow: hidden; transition: border-color 0.2s; }
+.sc-card:hover { border-color: rgba(200,64,26,0.4); }
+.sc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: opacity 0.2s; }
+.sc-card:hover::before { opacity: 1; }
+.sc-icon { font-size: 1.3rem; margin-bottom: 0.8rem; display: block; }
+.sc-card h4 { font-size: 0.9rem; font-weight: 500; color: var(--paper); margin-bottom: 0.3rem; }
+.sc-detail { font-size: 0.75rem; color: rgba(245,242,235,0.35); font-family: var(--mono); letter-spacing: 0.06em; margin-bottom: 0.8rem; }
+.sc-card p { font-size: 0.82rem; color: rgba(245,242,235,0.5); font-weight: 300; line-height: 1.75; }
+.sc-footer { margin-top: 2rem; padding: 1.2rem 1.4rem; border-left: 3px solid var(--accent); background: rgba(200,64,26,0.06); font-size: 0.88rem; color: rgba(245,242,235,0.6); font-weight: 300; line-height: 1.8; }
+.sc-footer strong { color: var(--paper); }
+
+/* ── BLOCK 5: AI 紀錄 ── */
+#records { background: var(--d-bg); }
+.rec-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.rec-flow { display: flex; flex-direction: column; gap: 0; }
+.rf-item { display: flex; gap: 1.2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--d-line); }
+.rf-item:first-child { border-top: 1px solid var(--d-line); }
+.rf-num { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 3px; width: 24px; }
+.rf-item h4 { font-size: 0.88rem; font-weight: 500; color: var(--paper); margin-bottom: 0.2rem; }
+.rf-item p { font-size: 0.8rem; color: rgba(245,242,235,0.4); font-weight: 300; line-height: 1.65; }
+/* LINE report mockup */
+.line-report { background: #0a1f0a; border: 1px solid rgba(6,199,85,0.15); overflow: hidden; }
+.lr-header { background: #0d290d; padding: 0.9rem 1.1rem; border-bottom: 1px solid rgba(6,199,85,0.15); display: flex; align-items: center; gap: 10px; }
+.lr-av { width: 28px; height: 28px; border-radius: 50%; background: #06C755; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.lr-nm { font-size: 0.8rem; color: white; font-weight: 500; }
+.lr-st { font-size: 0.6rem; color: rgba(255,255,255,0.35); font-family: var(--mono); }
+.lr-body { padding: 1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+.lr-msg { background: #06C755; border-radius: 10px 10px 10px 2px; padding: 0.75rem 1rem; font-size: 0.75rem; color: white; font-weight: 300; line-height: 1.6; align-self: flex-start; max-width: 90%; }
+.lr-msg .lr-title { font-weight: 600; margin-bottom: 0.4rem; font-size: 0.78rem; }
+.lr-msg .lr-row { display: flex; gap: 0.5rem; margin-top: 0.3rem; font-size: 0.72rem; opacity: 0.85; }
+.lr-msg .lr-key { opacity: 0.65; flex-shrink: 0; }
+.lr-time { font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.2); text-align: center; }
+
+/* ── BLOCK 6: 適用對象 ── */
+#targets { background: var(--d-card); }
+.tgt-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.tgt-card { padding: 1.6rem; border: 1px solid var(--d-line); transition: border-color 0.2s, background 0.2s; }
+.tgt-card:hover { border-color: rgba(232,160,32,0.3); background: #1a1b18; }
+.tgt-icon { font-size: 1.2rem; margin-bottom: 0.6rem; display: block; }
+.tgt-card h4 { font-size: 0.9rem; font-weight: 500; color: var(--paper); margin-bottom: 0.3rem; }
+.tgt-card p { font-size: 0.8rem; color: rgba(245,242,235,0.4); font-weight: 300; line-height: 1.7; }
+.tgt-rule { margin-top: 2rem; padding: 1.2rem 1.4rem; border: 1px solid rgba(232,160,32,0.2); background: rgba(232,160,32,0.05); font-size: 0.88rem; color: rgba(245,242,235,0.6); font-weight: 300; line-height: 1.85; }
+.tgt-rule strong { color: var(--amber); }
+
+/* ── BLOCK 7: 導入方式 ── */
+#onboard { background: var(--d-bg); }
+.ob-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.ob-options { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1rem; }
+.ob-opt { padding: 1.6rem; border: 1px solid var(--d-line); transition: border-color 0.2s; }
+.ob-opt:hover { border-color: rgba(232,160,32,0.3); }
+.ob-opt-badge { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.7rem; display: block; }
+.ob-opt h4 { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; color: var(--paper); margin-bottom: 0.4rem; }
+.ob-opt p { font-size: 0.82rem; color: rgba(245,242,235,0.4); font-weight: 300; line-height: 1.75; }
+.ob-steps { display: flex; flex-direction: column; gap: 0; }
+.ob-step { display: flex; gap: 1.2rem; padding: 1.3rem 0; border-bottom: 1px solid var(--d-line); }
+.ob-step:first-child { border-top: 1px solid var(--d-line); }
+.ob-snum { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 3px; }
+.ob-step h4 { font-size: 0.88rem; font-weight: 500; color: var(--paper); margin-bottom: 0.2rem; }
+.ob-step p { font-size: 0.8rem; color: rgba(245,242,235,0.4); font-weight: 300; line-height: 1.65; }
+.ob-note { margin-top: 1.5rem; padding: 1rem 1.3rem; border: 1px solid var(--d-line); font-family: var(--mono); font-size: 0.75rem; color: rgba(245,242,235,0.3); letter-spacing: 0.04em; line-height: 1.7; }
+.ob-note strong { color: rgba(245,242,235,0.6); }
+
+/* ── FINAL CTA ── */
+#final-cta { background: var(--d-card); padding: 96px 4vw; text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--d-line); }
+#final-cta::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 65%); pointer-events: none; }
+#final-cta h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: var(--paper); margin-bottom: 1rem; position: relative; }
+#final-cta p { font-size: 0.95rem; color: rgba(245,242,235,0.45); font-weight: 300; line-height: 1.85; margin-bottom: 2.5rem; position: relative; }
+.cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+.btn-amber { display: inline-flex; align-items: center; gap: 7px; padding: 14px 28px; background: var(--amber); color: var(--ink); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; transition: opacity 0.2s; }
+.btn-amber:hover { opacity: 0.88; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 7px; padding: 14px 28px; border: 1.5px solid var(--d-line); color: rgba(245,242,235,0.6); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--paper); }
+
+/* FOOTER */
+footer { background: #060607; color: rgba(255,255,255,0.2); padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.73rem; font-family: var(--mono); letter-spacing: 0.04em; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--d-line); }
+footer a { color: rgba(255,255,255,0.2); text-decoration: none; }
+footer a:hover { color: var(--amber); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .pain-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .value-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .svc-grid { grid-template-columns: 1fr; }
+  .sc-grid { grid-template-columns: 1fr; }
+  .rec-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .tgt-grid { grid-template-columns: 1fr; }
+  .ob-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .value-stats { grid-template-columns: 1fr 1fr; }
+  .temp-widget { flex-wrap: wrap; gap: 1rem; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">磐<span>誠</span>資訊</a>
+  <ul class="nav-links">
+    <li><a href="index.html">首頁</a></li>
+    <li><a href="services.html">服務項目</a></li>
+    <li><a href="line-ai.html">LINE AI 客服</a></li>
+    <li><a href="inspection.html" class="active">巡檢服務</a></li>
+    <li><a href="about.html">關於我們</a></li>
+    <li><a href="about.html#contact-cta">聯絡我們</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">首頁</a>
+  <a href="services.html" onclick="toggleMenu()">服務項目</a>
+  <a href="line-ai.html" onclick="toggleMenu()">LINE AI 客服</a>
+  <a href="inspection.html" onclick="toggleMenu()">巡檢服務</a>
+  <a href="index.html#cta" onclick="toggleMenu()">聯絡我們</a>
+</div>
+
+<!-- PAGE HERO -->
+<section id="page-hero">
+  <div class="hero-scan-line"></div>
+  <div class="page-hero-inner reveal">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>巡檢與設備安全服務</div>
+    <h1>不是等壞掉才處理<br>而是<em>提前發現問題</em>，避免出事</h1>
+    <p class="sub">透過夜間巡檢與熱像設備，在問題擴大前就介入。<br>每次巡檢結果透過 LINE 即時回報，讓你隨時掌握設備狀況。</p>
+    <div class="temp-widget">
+      <div class="temp-item">
+        <div class="temp-val normal">38°C</div>
+        <div class="temp-label">網路設備 正常</div>
+      </div>
+      <div class="temp-sep"></div>
+      <div class="temp-item">
+        <div class="temp-val warn">67°C</div>
+        <div class="temp-label">電箱 A 異常偏高</div>
+      </div>
+      <div class="temp-sep"></div>
+      <div class="temp-item">
+        <div class="temp-val alert">91°C</div>
+        <div class="temp-label">設備 B 警告</div>
+      </div>
+      <div class="temp-sep"></div>
+      <div class="temp-status">熱像檢測模擬數據</div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCK 1: 痛點 -->
+<section class="sec" id="pain">
+  <div class="inner">
+    <div class="pain-grid">
+      <div class="reveal">
+        <div class="tag">// 痛點</div>
+        <h2>多數問題，都是<br>「發生之後」才發現</h2>
+        <div class="pain-scenarios">
+          <div class="ps-item">
+            <span class="ps-icon">🔥</span>
+            <div>
+              <h4>設備過熱、電箱異常、線路老化</h4>
+              <p>這些問題在發生前，通常都有徵兆。但沒有巡檢，就不會被發現。</p>
+            </div>
+          </div>
+          <div class="ps-item">
+            <span class="ps-icon">⚡</span>
+            <div>
+              <h4>等到出問題時</h4>
+              <p>往往已經影響營運，甚至造成損失。維修成本遠高於預防成本。</p>
+            </div>
+          </div>
+          <div class="ps-item">
+            <span class="ps-icon">👁️</span>
+            <div>
+              <h4>沒有巡檢，就不會被發現</h4>
+              <p>肉眼難以察覺的過熱、老化、負載異常，需要專業設備才能偵測。</p>
+            </div>
+          </div>
+        </div>
+        <div class="pain-conclusion">
+          問題不是突然發生的——<br>
+          <strong>是長期被忽略之後才爆發的。</strong>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="tag" style="margin-bottom:1.2rem;">// 沒有巡檢 vs 有巡檢</div>
+        <div class="timeline-viz">
+          <div class="tl-item">
+            <div class="tl-dot ok"></div>
+            <div class="tl-content">
+              <div class="tl-time">第 1 週</div>
+              <div class="tl-text">設備運作正常，無明顯異狀</div>
+            </div>
+            <div class="tl-badge ok">NORMAL</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot warn"></div>
+            <div class="tl-content">
+              <div class="tl-time">第 3 週</div>
+              <div class="tl-text"><strong>熱像儀偵測到電箱溫度偏高</strong>，巡檢回報業主</div>
+            </div>
+            <div class="tl-badge warn">WARNING</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot ok"></div>
+            <div class="tl-content">
+              <div class="tl-time">第 3 週末</div>
+              <div class="tl-text">提前處理，問題解決，<strong>避免停機損失</strong></div>
+            </div>
+            <div class="tl-badge ok">RESOLVED</div>
+          </div>
+          <div class="tl-item" style="background:rgba(200,64,26,0.05);border-left:2px solid rgba(200,64,26,0.3);">
+            <div class="tl-dot bad"></div>
+            <div class="tl-content">
+              <div class="tl-time">若無巡檢 → 第 6 週</div>
+              <div class="tl-text"><strong>設備故障、營運中斷</strong>，緊急維修費用 + 損失</div>
+            </div>
+            <div class="tl-badge bad">FAILURE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 2: 核心價值 -->
+<section class="sec" id="value">
+  <div class="inner">
+    <div class="value-wrap">
+      <div class="reveal">
+        <div class="tag">// 核心價值</div>
+        <h2>巡檢的目的<br>不是紀錄，是避免問題</h2>
+        <div class="value-detected">
+          <div class="vd-label">// 透過定期巡檢與熱像設備，可提前發現</div>
+          <div class="vd-items">
+            <div class="vd-item"><span class="vd-icon">🌡️</span><p>設備異常發熱</p></div>
+            <div class="vd-item"><span class="vd-icon">⚡</span><p>電力負載問題</p></div>
+            <div class="vd-item"><span class="vd-icon">⚠️</span><p>潛在故障風險</p></div>
+          </div>
+          <div class="value-result">
+            <div class="vr-title">// 結果</div>
+            <div class="vr-items">
+              <div class="vr-item">在問題擴大前先處理</div>
+              <div class="vr-item">降低營運中斷與維修成本</div>
+              <div class="vr-item">設備壽命延長，減少汰換頻率</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="value-quote">
+          不是等壞掉才修，<br>而是提前避免出事
+        </div>
+        <div class="value-stats">
+          <div class="vs">
+            <div class="vs-num">70%</div>
+            <div class="vs-lbl">設備故障可透過定期檢測提前發現</div>
+          </div>
+          <div class="vs">
+            <div class="vs-num">3×</div>
+            <div class="vs-lbl">預防成本遠低於事後緊急維修</div>
+          </div>
+          <div class="vs">
+            <div class="vs-num">24h</div>
+            <div class="vs-lbl">巡檢後 LINE 回報，讓你即時掌握</div>
+          </div>
+          <div class="vs">
+            <div class="vs-num">100%</div>
+            <div class="vs-lbl">每次巡檢留下完整紀錄可追溯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 3: 服務內容 -->
+<section class="sec" id="services-content">
+  <div class="inner">
+    <div class="reveal">
+      <div class="tag">// 服務內容</div>
+      <h2>巡檢服務內容</h2>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card">
+        <span class="svc-card-num">01</span>
+        <span class="svc-card-icon">🌙</span>
+        <h4>夜間巡檢</h4>
+        <p>低干擾檢查環境。夜間人員少，設備干擾低，最適合進行詳細的環境安全巡視。</p>
+      </div>
+      <div class="svc-card">
+        <span class="svc-card-num">02</span>
+        <span class="svc-card-icon">🌡️</span>
+        <h4>設備熱像檢測</h4>
+        <p>使用熱像儀掃描電箱、設備、線路，偵測肉眼無法察覺的過熱與電力負載問題。</p>
+      </div>
+      <div class="svc-card">
+        <span class="svc-card-num">03</span>
+        <span class="svc-card-icon">📹</span>
+        <h4>監視器與網路設備檢查</h4>
+        <p>確認攝影機視角、錄影狀態、網路設備運作是否正常，發現異常即時回報。</p>
+      </div>
+      <div class="svc-card">
+        <span class="svc-card-num">04</span>
+        <span class="svc-card-icon">🔒</span>
+        <h4>基本環境安全檢視</h4>
+        <p>檢查出入口、重要設施、異常跡象。提供整體環境安全評估，不只是設備。</p>
+      </div>
+    </div>
+    <div class="svc-note reveal">
+      ✦ 依場域需求調整巡檢項目 — 民宿、餐廳、工廠、辦公室，各有不同重點，客製化巡檢清單
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 4: 實際情境 -->
+<section class="sec" id="scenarios">
+  <div class="inner">
+    <div class="reveal">
+      <div class="tag">// 實際情境</div>
+      <h2>實際巡檢情境</h2>
+      <p style="font-size:0.9rem;color:rgba(245,242,235,0.4);font-weight:300;line-height:1.8;margin-bottom:0;max-width:520px;">這些情境若未及早處理，可能導致設備故障或營運中斷。</p>
+    </div>
+    <div class="sc-grid reveal">
+      <div class="sc-card">
+        <span class="sc-icon">🔴</span>
+        <h4>發現電箱異常發熱</h4>
+        <div class="sc-detail">潛在過載 · 高風險</div>
+        <p>熱像儀偵測到電箱表面溫度超過正常範圍，可能因電力負載過高或接點老化造成。若不處理，可能引發跳電或火災。</p>
+      </div>
+      <div class="sc-card">
+        <span class="sc-icon">🟡</span>
+        <h4>設備溫度異常</h4>
+        <div class="sc-detail">風扇或散熱問題 · 中風險</div>
+        <p>網路交換機或伺服器散熱不良，長期高溫運作會縮短設備壽命，增加故障機率。</p>
+      </div>
+      <div class="sc-card">
+        <span class="sc-icon">🟠</span>
+        <h4>網路設備長時間高負載</h4>
+        <div class="sc-detail">連線品質下降 · 中風險</div>
+        <p>路由器或 AP 長時間高負載，可能導致 Wi-Fi 不穩定、斷線，影響住客或客人體驗。</p>
+      </div>
+      <div class="sc-card">
+        <span class="sc-icon">🔶</span>
+        <h4>監視器運作異常</h4>
+        <div class="sc-detail">錄影中斷 · 安全疑慮</div>
+        <p>攝影機離線或畫面異常，可能因電源問題或設備故障，造成監控死角，影響場域安全。</p>
+      </div>
+    </div>
+    <div class="sc-footer reveal">
+      <strong>這些問題若未及早處理</strong>，可能導致設備故障或營運中斷——而這些，都可以透過定期巡檢提前發現。
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 5: AI 紀錄 + LINE 回報 -->
+<section class="sec" id="records">
+  <div class="inner">
+    <div class="rec-wrap">
+      <div class="reveal">
+        <div class="tag">// AI 紀錄 + LINE 回報</div>
+        <h2>巡檢結果，不只是看過<br>而是留下紀錄</h2>
+        <div class="rec-flow">
+          <div class="rf-item">
+            <span class="rf-num">S1</span>
+            <div>
+              <h4>每次巡檢後整理檢查結果</h4>
+              <p>時間、地點、設備狀態、異常項目，全部系統化紀錄。</p>
+            </div>
+          </div>
+          <div class="rf-item">
+            <span class="rf-num">S2</span>
+            <div>
+              <h4>透過 LINE 即時回報業主</h4>
+              <p>即使不在現場，也能第一時間掌握設備狀況。</p>
+            </div>
+          </div>
+          <div class="rf-item">
+            <span class="rf-num">S3</span>
+            <div>
+              <h4>必要時可追蹤歷史紀錄</h4>
+              <p>了解設備變化趨勢，提前預測下一次可能發生的問題。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="line-report">
+          <div class="lr-header">
+            <div class="lr-av">📊</div>
+            <div>
+              <div class="lr-nm">磐誠資訊 · 巡檢回報</div>
+              <div class="lr-st">LINE 官方帳號</div>
+            </div>
+          </div>
+          <div class="lr-body">
+            <div class="lr-time">今天 02:47</div>
+            <div class="lr-msg">
+              <div class="lr-title">🔍 夜間巡檢報告 #0421</div>
+              <div class="lr-row"><span class="lr-key">時間</span><span>2025/04/21 02:30–03:15</span></div>
+              <div class="lr-row"><span class="lr-key">場域</span><span>山海小築民宿</span></div>
+              <div class="lr-row"><span class="lr-key">狀態</span><span>⚠️ 發現 1 項異常</span></div>
+            </div>
+            <div class="lr-msg" style="background:rgba(255,255,255,0.12);">
+              <div class="lr-title" style="color:#ffcc44;">⚠️ 異常項目</div>
+              <div class="lr-row"><span class="lr-key">位置</span><span>1F 電箱</span></div>
+              <div class="lr-row"><span class="lr-key">溫度</span><span>67°C（正常 &lt;50°C）</span></div>
+              <div class="lr-row"><span class="lr-key">建議</span><span>建議本週安排電工檢查</span></div>
+            </div>
+            <div class="lr-msg">
+              其他設備均正常運作 ✅<br>
+              完整報告請查看附件截圖
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 6: 適用對象 -->
+<section class="sec" id="targets">
+  <div class="inner">
+    <div class="reveal">
+      <div class="tag">// 適用對象</div>
+      <h2>適用對象</h2>
+    </div>
+    <div class="tgt-grid reveal">
+      <div class="tgt-card">
+        <span class="tgt-icon">🏡</span>
+        <h4>民宿 / 旅宿業</h4>
+        <p>設備全天候運作，住客安全優先。電箱、監視器、網路設備都需要定期確認狀態。</p>
+      </div>
+      <div class="tgt-card">
+        <span class="tgt-icon">🍽️</span>
+        <h4>餐廳 / 店面</h4>
+        <p>冷氣、冰箱、POS 設備故障直接影響營業。提前發現電力問題，避免臨時停業。</p>
+      </div>
+      <div class="tgt-card">
+        <span class="tgt-icon">🏢</span>
+        <h4>小型企業 / 工作室</h4>
+        <p>伺服器、網路、電力系統穩定性對工作效率至關重要，不能等到壞了才處理。</p>
+      </div>
+      <div class="tgt-card">
+        <span class="tgt-icon">🏗️</span>
+        <h4>需要設備穩定運作的場域</h4>
+        <p>任何設備一出問題就會影響營運的場所，都適合導入定期巡檢服務。</p>
+      </div>
+    </div>
+    <div class="tgt-rule reveal">
+      <strong>只要設備一出問題就會影響營運</strong>——都適合導入巡檢服務。<br>
+      服務範圍以恆春半島為主，其他地區可洽詢遠端協助方案。
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- BLOCK 7: 導入方式 -->
+<section class="sec" id="onboard">
+  <div class="inner">
+    <div class="ob-wrap">
+      <div class="reveal">
+        <div class="tag">// 導入方式</div>
+        <h2>導入方式</h2>
+        <div class="ob-options">
+          <div class="ob-opt">
+            <span class="ob-opt-badge">方案 A</span>
+            <h4>單次巡檢</h4>
+            <p>可依需求安排單次現場巡檢。適合想先了解場域現況的客戶，或有特殊需求時使用。</p>
+          </div>
+          <div class="ob-opt">
+            <span class="ob-opt-badge">方案 B · 推薦</span>
+            <h4>定期巡檢（月費制）</h4>
+            <p>每月固定巡檢，持續追蹤設備狀態變化，比單次巡檢更能發現長期趨勢問題。</p>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="tag" style="margin-bottom:1.2rem;">// 導入步驟</div>
+        <div class="ob-steps">
+          <div class="ob-step">
+            <span class="ob-snum">01</span>
+            <div>
+              <h4>先評估現場狀況</h4>
+              <p>了解場域規模、設備類型、重點檢查區域，再提供適合的巡檢方式。</p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-snum">02</span>
+            <div>
+              <h4>確認巡檢項目與頻率</h4>
+              <p>依實際需求調整巡檢清單，不是一套固定流程套用所有客戶。</p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-snum">03</span>
+            <div>
+              <h4>正式執行，LINE 回報</h4>
+              <p>每次巡檢後整理報告，透過 LINE 回報，讓你隨時掌握場域狀況。</p>
+            </div>
+          </div>
+        </div>
+        <div class="ob-note">
+          <strong>不需要一次導入全部服務</strong> — 可先從單次巡檢開始，確認有幫助再轉定期方案
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="final-cta">
+  <div class="inner reveal">
+    <h2>想了解你的場域<br>是否需要巡檢？</h2>
+    <p>
+      可以先簡單評估現場狀況<br>
+      了解是否有潛在風險，再決定是否導入巡檢服務
+    </p>
+    <div class="cta-btns">
+      <a href="index.html#cta" class="btn-amber">預約巡檢評估</a>
+      <a href="index.html#cta" class="btn-ghost">聯絡我們 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 磐誠資訊有限公司 · 統編 42755900</span>
+  <span>屏東縣恆春鎮山腳里環城南路 20 號 1 樓</span>
+  <a href="#page-hero">↑ 回頂部</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>
