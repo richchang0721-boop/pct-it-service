@@ -107,6 +107,8 @@ h2 { font-family: var(--serif); font-size: clamp(1.6rem, 2.8vw, 2.3rem); font-we
 .cs-item:hover { border-color: var(--ink); box-shadow: 4px 4px 0 var(--accent); }
 .cs-item .ci { font-size: 1.2rem; flex-shrink: 0; }
 .cs-item .ct { font-size: 0.85rem; font-weight: 400; }
+.cs-title { font-size: 0.85rem; font-weight: 400; color: var(--ink); }
+.cs-desc { font-size: 0.75rem; color: var(--muted); font-weight: 300; }
 .cs-item .cd { font-size: 0.75rem; color: var(--muted); font-weight: 300; }
 
 /* ── BLOCK 2: 日常維運 ── */
@@ -255,7 +257,7 @@ footer a:hover { color: var(--accent); }
   <a href="index.html" onclick="toggleMenu()">首頁</a>
   <a href="services.html" onclick="toggleMenu()">服務項目</a>
   <a href="index.html#line-ai" onclick="toggleMenu()">LINE AI 客服</a>
-  <a href="contact.html" onclick="toggleMenu()">聯絡我們</a>
+  <a href="index.html#cta" onclick="toggleMenu()">聯絡我們</a>
 </div>
 
 <!-- PAGE HERO -->
@@ -298,23 +300,23 @@ footer a:hover { color: var(--accent); }
         <div class="concept-services">
           <div class="cs-item">
             <span class="ci">🖥️</span>
-            <div><div class="ct">電腦維修 / 組裝</div><div class="cd">日常維運</div></div>
+            <div><div class="cs-title">電腦維修 / 組裝</div><div class="cs-desc">日常維運</div></div>
           </div>
           <div class="cs-item">
             <span class="ci">📹</span>
-            <div><div class="ct">CCTV 監視器安裝與維護</div><div class="cd">日常維運</div></div>
+            <div><div class="cs-title">CCTV 監視器安裝與維護</div><div class="cs-desc">日常維運</div></div>
           </div>
           <div class="cs-item">
             <span class="ci">🌐</span>
-            <div><div class="ct">網路建置與設定</div><div class="cd">日常維運</div></div>
+            <div><div class="cs-title">網路建置與設定</div><div class="cs-desc">日常維運</div></div>
           </div>
           <div class="cs-item">
             <span class="ci">🤖</span>
-            <div><div class="ct">LINE Bot / AI 客服系統</div><div class="cd">營運效率</div></div>
+            <div><div class="cs-title">LINE Bot / AI 客服系統</div><div class="cs-desc">營運效率</div></div>
           </div>
           <div class="cs-item">
             <span class="ci">🔍</span>
-            <div><div class="ct">巡檢與技術紀錄服務</div><div class="cd">安全與巡檢</div></div>
+            <div><div class="cs-title">巡檢與技術紀錄服務</div><div class="cs-desc">安全與巡檢</div></div>
           </div>
         </div>
       </div>
@@ -606,8 +608,8 @@ footer a:hover { color: var(--accent); }
       我們會依你的需求，提供最適合的建議
     </p>
     <div class="cta-btns">
-      <a href="contact.html" class="btn-w">免費測試 LINE AI 客服</a>
-      <a href="contact.html" class="btn-o">聯絡我們 →</a>
+      <a href="index.html#cta" class="btn-w">免費測試 LINE AI 客服</a>
+      <a href="index.html#cta" class="btn-o">聯絡我們 →</a>
     </div>
   </div>
 </section>
